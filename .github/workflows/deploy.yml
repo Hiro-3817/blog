@@ -17,14 +17,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: 'latest'
-          extended: true
+      - name: Install Hugo
+        run: |
+          wget https://github.com/gohugoio/hugo/releases/download/v0.153.1/hugo_extended_0.153.1_Linux-64bit.tar.gz
+          tar -xzf hugo_extended_0.153.1_Linux-64bit.tar.gz
+          sudo mv hugo /usr/local/bin/
 
       - name: Build
-        run: hugo --minify
+        run: ./hugo --minify
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
