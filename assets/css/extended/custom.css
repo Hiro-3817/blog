@@ -1,0 +1,43 @@
+/* PaperMod custom tweaks */
+
+/* カード内コンテンツの余白とホバー挙動の調整 */
+.post-entry .entry-content {
+  background: transparent !important;
+  padding: 0.6rem 0 !important;
+}
+.post-entry:hover {
+  transform: none !important;
+}
+
+/* 角丸のトーンダウン（テーマの半径が強い場合に穏やかに） */
+.post-entry,
+.post-entry .entry-content {
+  border-radius: 8px !important;
+}
+
+/* 読了時間やメタ情報の色味を落ち着かせる */
+.meta-info,
+.post-time {
+  color: var(--secondary) !important;
+}
+
+/* 記事タイトル下の余白を少しコンパクトに */
+.post-title {
+  margin-bottom: 0.4rem !important;
+}
+
+/* Home情報カードのボタン角丸をそろえる（任意） */
+.home-info .buttons a {
+  border-radius: 6px;
+}
+
+/* ダークモードの微調整 */
+:root.dark {
+  --theme: #1e1e1e;
+  --entry: transparent;
+}
+
+/* 先頭記事の特別スタイルを使う場合でも見た目をそろえたいとき（任意）
+   → config.yamlの params.disableSpecial1stPost を false にした時に有効化
+   .first-entry { background: transparent !important; box-shadow: none !important; }
+*/

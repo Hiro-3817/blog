@@ -1,0 +1,100 @@
+baseURL: "https://username.github.io/"
+languageCode: "ja"
+title: "TEST"
+
+pagination:
+  pagerSize: 10
+
+# 基本設定
+enableRobotsTXT: true
+canonifyURLs: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+# 出力設定（RSS/Sitemap/Robots）
+outputs:
+  home: [HTML, RSS]
+
+# パーマリンク（PaperMod推奨のシンプル構成）
+permalinks:
+  posts: "/posts/:slug/"
+
+theme:
+  - PaperMod
+
+# PaperMod params（見た目・SEO・SNS）
+params:
+  description: "HugoとPaperModでブログを構築するガイド"
+  keywords: ["Hugo", "PaperMod", "GitHub Pages", "ブログ"]
+  env: "production"
+  defaultTheme: "auto"
+  disableSpecial1stPost: true
+  ShowReadingTime: true
+  ShowShareButtons: true
+  ShowCodeCopyButtons: true
+  ShowToc: true
+  TocOpen: false
+  images: ["images/og-image.png"]
+  author: "Hirokazu Asano"
+  comments: false
+
+  # ホーム情報カード（必要なら）
+  homeInfoParams:
+    Title: "こんにちは 👋"
+    Content: "Hugo + PaperModでブログを運用しています。"
+
+  # ソーシャルリンク（必要に応じて編集）
+  socialIcons:
+    - name: github
+      url: "https://github.com/username"
+    - name: x
+      url: "https://x.com/username"
+    - name: rss
+      url: "/index.xml"
+
+  # カスタムCSS（カード背景を調整したい場合など）
+  customCSS:
+    - css/extended/custom.css
+
+# メニュー
+menu:
+  main:
+    - name: Home
+      url: /
+      weight: 1
+    - name: Posts
+      url: /posts/
+      weight: 2
+    - name: Tags
+      url: /tags/
+      weight: 3
+    - name: About
+      url: /about/
+      weight: 4
+
+# タクソノミー
+taxonomies:
+  tag: tags
+  category: categories
+
+# Sitemap
+sitemap:
+  changefreq: daily
+  priority: 0.5
+  filename: sitemap.xml
+
+# Minify
+minify:
+  disableXML: true
+  minifyOutput: true
+
+# プライバシー設定（外部サービスの追跡を抑制）
+privacy:
+  x:
+    enableDNT: true
+  youtube:
+    privacyEnhanced: true
+
+# GitHub PagesでのベースURL（プロジェクトサイト例）
+# baseURL: "https://username.github.io/repository-name/"  # プロジェクトサイトの場合はこちらに切り替え
