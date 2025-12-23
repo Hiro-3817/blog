@@ -1,0 +1,2 @@
+# 生成物やビルドロック、アセット指紋付きCSSなどのキャッシュ
+rm -rf public/ resources/ .hugo_build.lock

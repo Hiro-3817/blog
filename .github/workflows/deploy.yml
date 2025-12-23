@@ -5,7 +5,8 @@ permissions:
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -18,10 +19,20 @@ jobs:
           submodules: true
           fetch-depth: 0
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
+      # Hugo キャッシュ
+      - name: Cache Hugo
+        uses: actions/cache@v4
         with:
-          hugo-version: 'latest'
+          path: |
+            ~/.cache/hugo
+          key: ${{ runner.os }}-hugo-${{ hashFiles('**/*.md') }}
+          restore-keys: |
+            ${{ runner.os }}-hugo-
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.153.1'
           extended: true
 
       - name: Build
@@ -32,3 +43,10 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          publish_branch: gh-pages
+          # Jekyll を無効化（.nojekyll を作成）
+          enable_jekyll: false
+          # gh-pages の履歴をクリーン化
+          force_orphan: true
+          # 独自ドメインを使う場合はコメント解除
+          # cname: example.com

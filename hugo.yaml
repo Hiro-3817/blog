@@ -1,6 +1,6 @@
 baseURL: "https://hiro-3817.github.io/blog/"
 languageCode: "ja"
-title: "TEST"
+title: "HNEST"
 
 pagination:
   pagerSize: 10
@@ -25,7 +25,7 @@ theme:
 
 # PaperMod params（見た目・SEO・SNS）
 params:
-  description: "HugoとPaperModでブログを構築するガイド"
+  description: "備忘録"
   keywords: ["Hugo", "PaperMod", "GitHub Pages", "ブログ"]
   env: "production"
   defaultTheme: "auto"
@@ -36,18 +36,18 @@ params:
   ShowToc: true
   TocOpen: false
   images: ["images/og-image.png"]
-  author: "Hirokazu Asano"
+  author: "HNEST"
   comments: false
 
-  # ホーム情報カード（必要なら）
+  # ホーム情報カード
   homeInfoParams:
     Title: "こんにちは 👋"
     Content: "Hugo + PaperModでブログを運用しています。"
 
-  # ソーシャルリンク（必要に応じて編集）
+  # ソーシャルリンク（assets/icons/*.svg でカスタムアイコンを使用可能）
   socialIcons:
     - name: github
-      url: "https://github.com/username"
+      url: "https://github.com/Hiro-3817"
     - name: x
       url: "https://x.com/username"
     - name: rss
@@ -61,16 +61,16 @@ params:
 menu:
   main:
     - name: Home
-      url: /
+      url: /blog/
       weight: 1
     - name: Posts
-      url: /posts/
+      url: /blog/posts/
       weight: 2
     - name: Tags
-      url: /tags/
+      url: /blog/tags/
       weight: 3
     - name: About
-      url: /about/
+      url: /blog/about/
       weight: 4
 
 # タクソノミー
@@ -89,12 +89,22 @@ minify:
   disableXML: true
   minifyOutput: true
 
+# マークアップ（コードハイライト＆生HTML）
+markup:
+  highlight:
+    noClasses: false
+  goldmark:
+    renderer:
+      unsafe: true
+
 # プライバシー設定（外部サービスの追跡を抑制）
 privacy:
   x:
     enableDNT: true
   youtube:
     privacyEnhanced: true
+
+copyright: "© 2025 HNEST"
 
 # GitHub PagesでのベースURL（プロジェクトサイト例）
 # baseURL: "https://username.github.io/repository-name/"  # プロジェクトサイトの場合はこちらに切り替え

@@ -25,7 +25,7 @@ Hugoは高速で柔軟な静的サイトジェネレーターであり、PaperMo
 8. ✅ 公開ブログを確認
 9. 🔗 公開URLのルール
 10. 💡 補足ポイント
-11. ⚠️ よくあるエラーと対処法
+11. ⚠ よくあるエラーと対処法
 
 ---
 
@@ -39,8 +39,8 @@ Hugoは高速で柔軟な静的サイトジェネレーターであり、PaperMo
 ## 🛠 Hugoサイトの新規作成
 
 ```shell
-hugo new site hugo_blog --format yaml  # 新しいHugoサイトを作成し、設定ファイルをYAML形式に
-cd hugo_blog
+hugo new site blog --format yaml  # 新しいHugoサイトを作成し、設定ファイルをYAML形式に
+cd blog
 git init  # Gitリポジトリを初期化
 ```
 
@@ -52,18 +52,20 @@ git init  # Gitリポジトリを初期化
 git submodule add --depth=1 https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod  # PaperModテーマを追加
 ```
 
-`config.yaml`に以下を追加：
+`hugo.yaml`に以下を追加：
 
 ```yaml
 theme: ["PaperMod"]
 ```
+
+> **注意**: GitHub Actionsでテーマを反映させるため、`actions/checkout` の `submodules: true` を必ず設定してください。
 
 ---
 
 ## ✍ 初回記事の作成
 
 ```shell
-hugo new content/posts/my-first-post.md  # 初回記事ファイルを作成
+hugo new posts/my-first-post.md  # 初回記事ファイルを作成
 ```
 
 記事ファイルを編集：
@@ -91,11 +93,11 @@ hugo server -D  # ローカルサーバーを起動し、ドラフト記事も�
 
 ## 🌐 GitHubリポジトリの準備
 
-1. GitHubで新リポジトリ（例：`username.github.io`）を作成。
+1. GitHubで新リポジトリ（例：`blog`）を作成。
 2. 以下を実行：
 
 ```shell
-git remote add origin https://github.com/username/username.github.io.git  # リモートリポジトリを追加
+git remote add origin https://github.com/username/blog.git  # リモートリポジトリを追加
 git branch -M main  # メインブランチに切り替え
 git add .
 git commit -m "初回投稿の準備"
@@ -106,13 +108,13 @@ git push -u origin main
 
 ## 🤖 GitHub Actionsで自動デプロイ設定
 
-`.github/workflows/hugo.yaml`を作成：
+`.github/workflows/deploy.yml`を作成：
 
 ```yaml
-name: Build and deploy
+name: Deploy Hugo site
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
 permissions:
   contents: write
 jobs:
@@ -122,10 +124,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
+          fetch-depth: 0
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: 'latest'
+          hugo-version: '0.153.1'
           extended: true
       - name: Build
         run: hugo --minify
@@ -134,24 +137,27 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          publish_branch: gh-pages
+          enable_jekyll: false
+          force_orphan: true
 ```
 
 ---
 
 ## ✅ 公開ブログを確認
 
-`https://username.github.io/`にアクセスし、記事が表示されれば成功！
+`https://username.github.io/blog/` にアクセスし、記事が表示されれば成功！
 
 ---
 
 ## 🔗 公開URLのルール
 
-- **ユーザーサイト**：リポジトリ名が`username.github.io` → `https://username.github.io/`
+- **ユーザーサイト**：リポジトリ名が `username.github.io` → `https://username.github.io/`
 - **プロジェクトサイト**：その他のリポジトリ名 → `https://username.github.io/repository-name/`
-`baseURL`を`config.yaml`に設定：
+`baseURL`を`hugo.yaml`に設定：
 
 ```yaml
-baseURL: "https://username.github.io/repository-name/"
+baseURL: "https://username.github.io/blog/"
 ```
 
 ---
@@ -159,7 +165,7 @@ baseURL: "https://username.github.io/repository-name/"
 ## 💡 補足ポイント
 
 - `public/`フォルダは`.gitignore`に追加。
-- PaperModのカスタマイズは`config.yaml`の`[params]`で調整可能。
+- PaperModのカスタマイズは`hugo.yaml`の`[params]`で調整可能。
 - 独自ドメインを設定する場合は`baseURL`を変更し、GitHub Pagesで「Custom domain」を設定。
 - **OGP/Twitterカード設定例**：
 
@@ -173,28 +179,32 @@ params:
 
 ---
 
-## ⚠️ よくあるエラーと対処法
+## ⚠ よくあるエラーと対処法
 
 ### 1. テーマが反映されない
 
-- 原因：`config.yaml`に`theme: ["PaperMod"]`が設定されていない。
-- 対処：設定を確認し、`hugo server`で再起動。
+- 原因：`hugo.yaml` に `theme: ["PaperMod"]` が設定されていない。
+- 対処：設定を確認し、`hugo server` で再起動。
 
 ### 2. 記事が表示されない
 
-- 原因：`draft: true`のまま。
-- 対処：`draft: false`に変更し、再ビルド。
+- 原因：`draft: true` のまま。
+- 対処：`draft: false` に変更し、再ビルド。
 
 ### 3. GitHub Pagesで404エラー
 
-- 原因：`baseURL`が正しく設定されていない。
-- 対処：公開URLに合わせて`config.yaml`を修正。
+- 原因：`baseURL` が正しく設定されていない。
+- 対処：公開URLに合わせて `hugo.yaml` を修正。
 
 ### 4. GitHub Actionsが失敗する
 
 - 原因：YAMLのインデントミスやトークン設定不備。
-- 対処：`.github/workflows/hugo.yaml`を再確認し、`github_token`が設定されているか確認。
+- 対処：`.github/workflows/deploy.yml` を再確認し、`github_token` が設定されているか確認。
 
 ---
 
-🎉 これで、Hugo + PaperMod + GitHub Pagesを使ったブログ公開の準備は完了です！
+## ✅ 最終チェック
+- RSSフィード確認：`https://username.github.io/blog/index.xml`
+- OGP確認：公開ページの `<meta property="og:image"...>` が意図した画像を指しているか
+
+---
