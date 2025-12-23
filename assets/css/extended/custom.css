@@ -23,7 +23,7 @@
 
 /* 記事タイトル下の余白を少しコンパクトに */
 .post-title {
-  margin-bottom: 0.4rem !important;
+  margin-bottom: 1.5rem !important;
 }
 
 /* Home情報カードのボタン角丸をそろえる（任意） */

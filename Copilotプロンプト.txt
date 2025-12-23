@@ -16,3 +16,13 @@ Branchは「gh-pages /(root)」になっています。
 動作確認すると以下の点が気になるため修正して欲しいです。
 ・フッターの文言が「© 2025 TEST · © 2025 HNEST | Powered by Hugo & PaperMod · Powered by Hugo & PaperMod」となっている
 ・ローカル環境で動作確認(hugo server -D)すると右上のメニューのURLが"Home"は「http://localhost:1313/」、"Posts"は「http://localhost:1313/posts/」、"Tags"は「http://localhost:1313/tags/」、"About"は「http://localhost:1313/about/」となっており、/blog/がないため404となる
+
+
+
+記事のページで気になる点があります。最新の投稿記事(hugo-papermod-github-guide.md)を送付しますので以下のことを修正してください。
+・自動生成された目次が初め縮小表示になっているが、デフォルトは展開の状態で表示させたい
+・下の方にスクロールしたときに以前はページトップに戻る「↑ボタン」が表示されていましたが今は表示されない
+
+
+
+あなたは超一流のブログ編集者です。添付の投稿を作成したので内容を確認し改善提案してください。

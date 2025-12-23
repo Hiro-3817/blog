@@ -104,7 +104,5 @@ privacy:
   youtube:
     privacyEnhanced: true
 
-copyright: "© 2025 HNEST"
-
 # GitHub PagesでのベースURL（プロジェクトサイト例）
 # baseURL: "https://username.github.io/repository-name/"  # プロジェクトサイトの場合はこちらに切り替え
