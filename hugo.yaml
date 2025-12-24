@@ -39,6 +39,11 @@ params:
   author: "HNEST"
   comments: false
 
+  # GA4
+  analytics:
+    google:
+      measurement_id: "G-SV452C9JE3"
+
   # ホーム情報カード
   homeInfoParams:
     Title: "こんにちは 👋"
