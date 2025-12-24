@@ -3,10 +3,10 @@ title: "🚀 Hugo + PaperMod + GitHub Pagesでブログ公開【初心者向け�
 slug: "hugo-papermod-github-pages-guide"
 description: "Hugo + PaperMod + GitHub Pagesを使って、ゼロからブログを公開するまでを完全ステップで解説。自動デプロイ（GitHub Actions）、公開URLの設定、OGP、よくあるエラーの回避までこの1本でOK。"
 date: 2025-12-22T10:00:00+09:00
-lastmod: 2025-12-23T10:00:00+09:00
+lastmod: 2025-12-24T14:00:00+09:00
 draft: false
 categories: ["Web開発", "サイト構築"]
-tags: ["Hugo", "PaperMod", "GitHub Pages", "GitHub Actions", "静的サイト", "SEO"]
+tags: ["Hugo", "PaperMod", "GitHub Pages", "GitHub Actions", "静的サイト", "ブログ構築", "デプロイ", "CI/CD", "SEO"]
 author: "HNEST"
 images: ["images/og-image.png"]
 ---
