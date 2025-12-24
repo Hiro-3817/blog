@@ -25,9 +25,9 @@ theme:
 
 # PaperMod params（見た目・SEO・SNS）
 params:
+  env: "production"
   description: "備忘録"
   keywords: ["Hugo", "PaperMod", "GitHub Pages", "ブログ"]
-  env: "production"
   defaultTheme: "auto"
   disableSpecial1stPost: true
   ShowReadingTime: true
@@ -38,11 +38,6 @@ params:
   images: ["images/og-image.png"]
   author: "HNEST"
   comments: false
-
-  # GA4
-  analytics:
-    google:
-      measurement_id: "G-SV452C9JE3"
 
   # ホーム情報カード
   homeInfoParams:
