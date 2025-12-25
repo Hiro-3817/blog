@@ -1,0 +1,74 @@
+{{- /* ===============================
+     カスタム Post Meta（日本語/英語対応）
+     表示内容：
+     📅 投稿日 ｜ 🔄 更新日 ｜ ⏱ 読了目安 ｜ ✍️ 著者（リンク）
+     =============================== */ -}}
+
+{{- $lang := .Site.Language.Lang | default "ja" -}}
+{{- $date := .Date -}}
+{{- $lastmod := .Lastmod -}}
+{{- $readingTime := .ReadingTime -}}
+
+{{/* 著者名とリンク（front matter > site config > fallback） */}}
+{{- $authorName := or .Params.author .Site.Author.name "HNEST" -}}
+{{- $authorURL := or .Params.authorLink .Site.Author.link "#" -}}
+
+<div class="post-meta">
+
+  {{/* --- 日本語版 --- */}}
+  {{- if eq $lang "ja" -}}
+
+    {{- if not $date.IsZero -}}
+      <span class="post-meta-item">
+        📅 投稿日：{{ $date.Format "2006年1月2日" }}
+      </span>
+    {{- end }}
+
+    {{- if ne $lastmod $date -}}
+      <span class="post-meta-separator">｜</span>
+      <span class="post-meta-item">
+        🔄 更新日：{{ $lastmod.Format "2006年1月2日" }}
+      </span>
+    {{- end }}
+
+    <span class="post-meta-separator">｜</span>
+    <span class="post-meta-item">
+      ⏱ 読了目安：{{ $readingTime }}分
+    </span>
+
+    <span class="post-meta-separator">｜</span>
+    <span class="post-meta-item">
+      ✍️ 著者：
+      <a href="{{ $authorURL }}">{{ $authorName }}</a>
+    </span>
+
+  {{/* --- 英語版 --- */}}
+  {{- else -}}
+
+    {{- if not $date.IsZero -}}
+      <span class="post-meta-item">
+        📅 Published: {{ $date.Format "Jan 2, 2006" }}
+      </span>
+    {{- end }}
+
+    {{- if ne $lastmod $date -}}
+      <span class="post-meta-separator">｜</span>
+      <span class="post-meta-item">
+        🔄 Updated: {{ $lastmod.Format "Jan 2, 2006" }}
+      </span>
+    {{- end }}
+
+    <span class="post-meta-separator">｜</span>
+    <span class="post-meta-item">
+      ⏱ Reading time: {{ $readingTime }} min
+    </span>
+
+    <span class="post-meta-separator">｜</span>
+    <span class="post-meta-item">
+      ✍️ Author:
+      <a href="{{ $authorURL }}">{{ $authorName }}</a>
+    </span>
+
+  {{- end }}
+
+</div>

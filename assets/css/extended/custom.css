@@ -9,6 +9,29 @@
   transform: none !important;
 }
 
+/* 記事のメタ情報表示デザイン */
+.post-meta {
+  font-size: 0.9rem;
+  color: var(--secondary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.post-meta-item {
+  white-space: nowrap;
+}
+
+.post-meta-separator {
+  opacity: 0.6;
+}
+
+.post-meta a {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
 /* 角丸のトーンダウン（テーマの半径が強い場合に穏やかに） */
 .post-entry,
 .post-entry .entry-content {

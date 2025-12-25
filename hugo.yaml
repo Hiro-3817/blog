@@ -57,6 +57,12 @@ params:
   customCSS:
     - css/extended/custom.css
 
+# 言語設定
+languages:
+  ja:
+    languageName: "Japanese"
+    weight: 1
+
 # メニュー
 menu:
   main:
