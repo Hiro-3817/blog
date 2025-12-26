@@ -86,15 +86,18 @@ menu:
     - name: Posts
       url: /blog/posts/
       weight: 2
+    - name: Categories
+      url: /blog/categories/
+      weight: 3
     - name: Tags
       url: /blog/tags/
-      weight: 3
+      weight: 4
     - name: About
       url: /blog/about/
-      weight: 4
+      weight: 5
     - name: Contact
       url: /blog/contact/
-      weight: 5
+      weight: 6
 
 # ---- タクソノミー（カテゴリ/タグ）----
 taxonomies:
