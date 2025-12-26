@@ -1,0 +1,391 @@
+
+<!-- ===== 目次＋↑：既存↑ボタンをクローンして目次ボタン生成、完全同期＆「|」区切り、右側ドロワー ===== -->
+<script>
+  (function () {
+    function ready(fn) {
+      if (document.readyState !== 'loading') fn();
+      else document.addEventListener('DOMContentLoaded', fn);
+    }
+
+    ready(function () {
+      // 単一記事のみで実行
+      const article = document.querySelector('.post-content');
+      if (!article) return;
+
+      // --- PaperModの目次DOMを探す：.toc > details > .inner に ul が入っている ---
+      let tocContainer = document.querySelector('.toc .inner');
+      let nav;
+      if (tocContainer && tocContainer.querySelector('ul')) {
+        nav = document.createElement('nav');
+        nav.id = 'TocSidebar';
+        nav.appendChild(tocContainer.querySelector('ul').cloneNode(true));
+      } else {
+        nav = buildTocFromHeadings(article);
+        if (!nav) return;
+        nav.id = 'TocSidebar';
+      }
+
+      // ===== 既存の ↑ボタン（#top-link/.top-link）を取得 or フォールバック作成 =====
+      let topBtnEl =
+        document.querySelector('#top-link') ||
+        document.querySelector('.top-link') ||
+        document.querySelector('a[href="#top"]');
+
+      if (!topBtnEl) {
+        const fallback = document.createElement('a');
+        fallback.href = '#top';
+        fallback.id = 'top-link';
+        fallback.className = 'top-link';
+        fallback.setAttribute('aria-label', 'go to top');
+        fallback.title = 'Go to Top (Alt + G)';
+        fallback.accessKey = 'g';
+        fallback.innerHTML =
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>';
+        document.body.appendChild(fallback);
+        topBtnEl = fallback;
+      }
+
+      // ===== 目次ボタンを ↑ボタンからクローンして生成（見た目・サイズ・状態を踏襲） =====
+      const tocLink = topBtnEl.cloneNode(true);
+      tocLink.removeAttribute('id');                 // 重複IDを避ける
+      tocLink.classList.add('qa-toc-link');          // ドロワー開時の制御用フラグ
+      tocLink.setAttribute('href', 'javascript:void(0)');
+      tocLink.setAttribute('aria-label', '目次を開く');
+      tocLink.setAttribute('title', 'Table of Contents');
+      // アイコンをハンバーガー風SVGに差し替え（currentColorでテーマ色に追随）
+      tocLink.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 12" fill="currentColor" aria-hidden="true" focusable="false">
+          <rect x="0" y="0" width="16" height="2"></rect>
+          <rect x="0" y="5" width="16" height="2"></rect>
+          <rect x="0" y="10" width="16" height="2"></rect>
+        </svg>
+        <span class="sr-only">目次</span>
+      `;
+      document.body.appendChild(tocLink);
+
+      // ===== 区切り「|」 =====
+      const divider = document.createElement('span');
+      divider.className = 'toc-top-divider';
+      divider.textContent = '|';
+      document.body.appendChild(divider);
+
+      // ===== オーバーレイ＆ドロワー（右側） =====
+      const overlay = document.createElement('div');
+      overlay.className = 'toc-overlay';
+
+      const drawer = document.createElement('div');
+      drawer.className = 'toc-drawer';
+      drawer.id = 'TocDrawer';
+      drawer.setAttribute('aria-hidden', 'true');
+
+      const header = document.createElement('div');
+      header.className = 'toc-drawer__header';
+
+      const drawerTitle = document.createElement('div');
+      drawerTitle.className = 'toc-drawer__title';
+      drawerTitle.textContent = '目次';
+
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'toc-drawer__close';
+      closeBtn.type = 'button';
+      closeBtn.setAttribute('aria-label', 'Close');
+      closeBtn.innerHTML = '✕';
+
+      const mobileNav = (tocContainer && tocContainer.querySelector('ul'))
+        ? nav.cloneNode(true)
+        : nav.cloneNode(true);
+
+      header.appendChild(drawerTitle);
+      header.appendChild(closeBtn);
+      drawer.appendChild(header);
+      drawer.appendChild(mobileNav);
+      document.body.appendChild(overlay);
+      document.body.appendChild(drawer);
+
+      // ===== sr-only ユーティリティ（テーマに無い場合の補完） =====
+      (function injectSrOnly() {
+        if (!document.querySelector('style[data-sr-only]')) {
+          const srStyle = document.createElement('style');
+          srStyle.setAttribute('data-sr-only', 'true');
+          srStyle.textContent = `
+            .sr-only {
+              position: absolute !important;
+              width: 1px !important;
+              height: 1px !important;
+              padding: 0 !important;
+              margin: -1px !important;
+              overflow: hidden !important;
+              clip: rect(0, 0, 0, 0) !important;
+              white-space: nowrap !important;
+              border: 0 !important;
+            }
+          `;
+          document.head.appendChild(srStyle);
+        }
+      })();
+
+      // ===== 可視判定 =====
+      function isVisible(el) {
+        if (!el) return false;
+        const cs = getComputedStyle(el);
+        const rect = el.getBoundingClientRect();
+        return cs.display !== 'none' &&
+               cs.visibility !== 'hidden' &&
+               rect.width > 0 &&
+               rect.height > 0 &&
+               parseFloat(cs.opacity || '1') > 0;
+      }
+
+      // ===== 区切りの実測幅を安全に取得（表示ズレ最小化） =====
+      let dividerWidth = 8; // フォールバック
+      function measureDividerWidth() {
+        const prev = divider.style.display;
+        divider.style.display = 'inline-block';
+        divider.style.visibility = 'hidden';
+        divider.style.position = 'fixed';
+        dividerWidth = Math.max(4, Math.round(divider.getBoundingClientRect().width));
+        divider.style.visibility = '';
+        divider.style.display = prev || 'none';
+      }
+      measureDividerWidth();
+
+      // ===== 目次＆区切りの位置・状態を↑ボタンに完全同期 =====
+      const GAP_H = 6; // 水平間隔（狭めに調整）
+      function syncPositions() {
+        if (!topBtnEl) return;
+
+        const cs = getComputedStyle(topBtnEl);
+
+        if (isVisible(topBtnEl)) {
+          const rect = topBtnEl.getBoundingClientRect();
+          const right = Math.max(16, window.innerWidth - rect.right);
+          const bottom = Math.max(16, window.innerHeight - rect.bottom);
+          const width = rect.width;
+          const height = rect.height;
+
+          // 可視状態・ポインタ状態をミラー
+          const visibleProps = {
+            display: 'inline-block',
+            opacity: cs.opacity || '1',
+            visibility: cs.visibility || 'visible',
+            pointerEvents: cs.pointerEvents || 'auto',
+          };
+          Object.assign(tocLink.style, visibleProps);
+          Object.assign(divider.style, { display: 'inline-block', opacity: visibleProps.opacity, visibility: visibleProps.visibility, pointerEvents: visibleProps.pointerEvents });
+
+          // 目次ボタン：↑の左隣へ（区切り幅 + GAP_H を挟む）
+          Object.assign(tocLink.style, {
+            position: 'fixed',
+            right: `${right + width + dividerWidth + GAP_H}px`,
+            bottom: `${bottom}px`,
+            zIndex: 1100,
+            width: `${width}px`,
+            height: `${height}px`,
+          });
+
+          // 区切り「|」：2つのボタンの間（↑の左側のすぐ外）
+          Object.assign(divider.style, {
+            position: 'fixed',
+            right: `${right + width + Math.max(2, Math.floor(GAP_H / 2))}px`,
+            bottom: `${bottom + Math.max(0, Math.round((height - 16) / 2))}px`,
+            zIndex: 1100,
+          });
+
+          // ↑ボタンが独自クラス（例：show）で可視制御している場合、それもミラー
+          tocLink.className = topBtnEl.className.replace(/\btop-link\b/, 'top-link qa-toc-link');
+        } else {
+          // ↑が非表示の間は目次と区切りも一緒に非表示（完全同期）
+          tocLink.style.display = 'none';
+          divider.style.display = 'none';
+        }
+      }
+
+      // 初期配置＋スクロール/リサイズ/ロードで同期
+      syncPositions();
+      window.addEventListener('load', () => { measureDividerWidth(); syncPositions(); });
+      window.addEventListener('resize', () => { measureDividerWidth(); syncPositions(); });
+      window.addEventListener('scroll', syncPositions);
+
+      // さらに、↑ボタンの class/style/属性変化を監視して即時同期（完全一致を保証）
+      const mo = new MutationObserver(() => syncPositions());
+      mo.observe(topBtnEl, { attributes: true, attributeFilter: ['class', 'style'], attributeOldValue: false });
+
+      // ===== レイアウトシフト対策（スクロールバー幅補正） =====
+      function getScrollbarWidth() {
+        return window.innerWidth - document.documentElement.clientWidth;
+      }
+      function lockScrollWithoutShift() {
+        const sbw = getScrollbarWidth();
+        document.documentElement.style.paddingRight = sbw > 0 ? `${sbw}px` : '';
+        document.documentElement.style.overflow = 'hidden';
+        document.body.classList.add('toc-open');
+      }
+      function unlockScrollWithoutShift() {
+        document.documentElement.style.overflow = '';
+        document.documentElement.style.paddingRight = '';
+        document.body.classList.remove('toc-open');
+      }
+
+      // ===== 開閉ロジック（右側ドロワー）＋フォーカス制御 =====
+      function openDrawer() {
+        overlay.classList.add('open');
+        drawer.classList.add('open');
+        drawer.setAttribute('aria-hidden', 'false');
+        tocLink.setAttribute('aria-expanded', 'true');
+
+        lockScrollWithoutShift();
+
+        // 現在読んでいる付近の目次リンクへフォーカス
+        focusNearestTocLink(mobileNav);
+
+        document.addEventListener('keydown', onKeydown);
+      }
+      function closeDrawer() {
+        overlay.classList.remove('open');
+        drawer.classList.remove('open');
+        drawer.setAttribute('aria-hidden', 'true');
+        tocLink.setAttribute('aria-expanded', 'false');
+
+        unlockScrollWithoutShift();
+
+        // フォーカスを目次ボタンへ戻す
+        tocLink.focus();
+
+        document.removeEventListener('keydown', onKeydown);
+      }
+      function onKeydown(e) {
+        if (e.key === 'Escape') closeDrawer();
+      }
+
+      tocLink.addEventListener('click', openDrawer);
+      closeBtn.addEventListener('click', closeDrawer);
+      overlay.addEventListener('click', closeDrawer);
+
+      // 既存↑ボタンをスムーススクロールに（既定動作と競合しないようpreventDefault）
+      topBtnEl?.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // ===== スクロール連動ハイライト（ドロワーのみ） =====
+      setupScrollSpy(drawer);
+
+      // ドロワー内リンククリックでドロワーを閉じる（少し遅延してジャンプ後に閉じる）
+      drawer.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', () => setTimeout(closeDrawer, 50));
+      });
+
+      // --- フォールバック生成器：本文の h2/h3 から TOC を組み立てる ---
+      function buildTocFromHeadings(root) {
+        const hs = root.querySelectorAll('h2, h3');
+        if (!hs.length) return null;
+
+        const nav = document.createElement('nav');
+        const ul = document.createElement('ul');
+
+        hs.forEach(h => {
+          if (!h.id) {
+            const base = h.textContent.trim()
+              .toLowerCase()
+              .replace(/\s+/g, '-')
+              .replace(/[^\w\-ぁ-んァ-ン一-龥]/g, '');
+            let id = base || 'section';
+            let i = 1;
+            while (document.getElementById(id)) { id = `${base}-${i++}`; }
+            h.id = id;
+          }
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = `#${h.id}`;
+          a.textContent = h.textContent.trim();
+          if (h.tagName.toLowerCase() === 'h3') {
+            let lastLi = ul.lastElementChild;
+            if (!lastLi) lastLi = ul.appendChild(document.createElement('li'));
+            let sub = lastLi.querySelector('ul');
+            if (!sub) sub = lastLi.appendChild(document.createElement('ul'));
+            const subLi = document.createElement('li');
+            subLi.appendChild(a);
+            sub.appendChild(subLi);
+          } else {
+            li.appendChild(a);
+            ul.appendChild(li);
+          }
+        });
+
+        nav.appendChild(ul);
+        return nav;
+      }
+
+      // ===== スクロール連動ハイライト =====
+      function setupScrollSpy(container) {
+        const links = container.querySelectorAll('a[href^="#"]');
+        const targets = Array.from(links).map(a => {
+          try {
+            const id = decodeURIComponent(a.getAttribute('href').substring(1));
+            const el = document.getElementById(id);
+            return el ? { link: a, el } : null;
+          } catch (e) { return null; }
+        }).filter(Boolean);
+
+        if (!targets.length) return;
+
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            const target = targets.find(t => t.el === entry.target);
+            if (!target) return;
+            if (entry.isIntersecting) {
+              links.forEach(a => a.classList.remove('is-active'));
+              target.link.classList.add('is-active');
+            }
+          });
+        }, { rootMargin: '0px 0px -70% 0px', threshold: 0.1 });
+
+        targets.forEach(t => obs.observe(t.el));
+      }
+
+      // ===== ドロワーオープン時：今読んでいる付近のリンクへフォーカス =====
+      function focusNearestTocLink(container) {
+        const links = container.querySelectorAll('a[href^="#"]');
+        const pairs = Array.from(links).map(a => {
+          const id = decodeURIComponent(a.getAttribute('href').substring(1));
+          const el = document.getElementById(id);
+          return el ? { link: a, el } : null;
+        }).filter(Boolean);
+
+        if (!pairs.length) {
+          closeBtn.focus();
+          return;
+        }
+
+        let nearest = null;
+        let minPositive = Infinity;
+        let maxNegative = -Infinity;
+
+        pairs.forEach(p => {
+          const rect = p.el.getBoundingClientRect();
+          const top = rect.top;
+          if (top >= 0) {
+            if (top < minPositive) {
+              minPositive = top;
+              nearest = p;
+            }
+          } else {
+            if (top > maxNegative) {
+              maxNegative = top;
+              nearest = nearest && minPositive !== Infinity ? nearest : p;
+            }
+          }
+        });
+
+        if (nearest && nearest.link) {
+          nearest.link.focus();
+          container.querySelectorAll('a').forEach(a => a.classList.remove('is-active'));
+          nearest.link.classList.add('is-active');
+        } else {
+          const firstLink = container.querySelector('a');
+          (firstLink || closeBtn).focus();
+        }
+      }
+    });
+  })();
+</script>

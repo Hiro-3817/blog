@@ -69,7 +69,8 @@ params:
 
   # --- カスタムCSS（見た目調整） ---
   customCSS:
-    - css/extended/custom.css                   # /assets/css/extended/custom.css または /static/css/extended/custom.css
+    - css/extended/custom.css                   # /assets/css/extended/custom.css
+    - css/extended/toc-sidebar.css
 
 # ---- 言語設定 ----
 languages:

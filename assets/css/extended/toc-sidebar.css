@@ -1,0 +1,121 @@
+
+/* ===== サイドバーは常に非表示（デスクトップ/モバイルとも） ===== */
+.toc-sidebar { display: none !important; }
+
+/* ===== 区切り線（「|」）：↑ボタンと目次ボタンの間に表示 ===== */
+.toc-top-divider {
+  position: fixed;
+  z-index: 1100;
+  right: 16px;   /* 初期値：JSで同期される */
+  bottom: 20px;  /* 初期値：JSで同期される */
+  display: none; /* ↑ボタンが見えるときのみ表示（JSで制御） */
+
+  color: var(--primary);
+  opacity: 0.6;
+  font-weight: 600;
+  line-height: 1;
+  user-select: none;
+  font-size: 1rem;
+}
+
+/* ===== ドロワー表示中：目次側ボタン＆区切りは非表示（↑ボタンは残す） ===== */
+.toc-open .qa-toc-link,
+.toc-open .toc-top-divider {
+  display: none !important;
+}
+
+/* ===== ドロワーとオーバーレイ（右側から表示） ===== */
+.toc-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 1000;
+}
+.toc-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.toc-drawer {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  width: min(86vw, 400px);       /* 必要なら 360〜460px に調整 */
+  transform: translateX(100%);
+  transition: transform 0.22s ease-out;
+  background: var(--theme);
+  color: var(--primary);
+  box-shadow: -10px 0 30px rgba(0,0,0,0.25);
+  z-index: 1001;
+}
+.toc-drawer.open {
+  transform: translateX(0%);
+}
+
+.toc-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.toc-drawer__title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.toc-drawer__close {
+  font-size: 1rem;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--theme);
+  color: var(--primary);
+  cursor: pointer;
+}
+.toc-drawer__close:hover,
+.toc-drawer__close:focus-visible {
+  border-color: var(--tertiary);
+}
+.toc-drawer nav {
+  padding: 12px 14px 20px;
+  overflow: auto;
+  max-height: calc(100vh - 60px);
+}
+
+/* ===== TOC内のリンク見た目（PaperModに馴染ませる） ===== */
+#TocSidebar ul { list-style: none; padding: 0; margin: 0; }
+#TocSidebar li { margin: 4px 0; }
+#TocSidebar a {
+  display: block;
+  text-decoration: none;
+  color: var(--primary);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  padding: 4px 0;
+  border-radius: 4px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+#TocSidebar a:hover { background: rgba(127,127,127,0.08); }
+#TocSidebar a.is-active { color: var(--tertiary); font-weight: 600; }
+#TocSidebar ul ul {
+  margin-left: 12px;
+  border-left: 2px solid var(--border);
+  padding-left: 10px;
+}
+
+/* ===== sr-only（PaperModに無い場合の簡易対応） ===== */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
