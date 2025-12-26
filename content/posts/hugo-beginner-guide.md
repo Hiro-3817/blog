@@ -3,7 +3,7 @@ title: "🚀 Hugo初心者入門書｜最速で理解する静的サイトジェ
 slug: "hugo-beginner-guide"
 description: "Hugo は「高速・シンプル・拡張性の高い静的サイトジェネレーター（SSG）」として世界中で利用されています。この記事では、Hugoとは何か？何ができるのか？WordPressなどの類似ツールと何が違うのか？を初心者が最短で理解できるよう、Hugoの特徴・仕組み・メリットを丁寧に解説します。"
 date: 2025-12-24T14:00:00+09:00
-lastmod: 2025-12-24T14:00:00+09:00
+lastmod: 2025-12-26T11:00:00+09:00
 draft: false
 categories: ["Web開発", "Hugo入門"]
 tags: ["Hugo", "静的サイト", "SSG", "ブログ構築", "初心者向け", "WordPress比較", "Jekyll比較", "Next.js比較"]
@@ -116,8 +116,8 @@ sudo apt install hugo
 ### 2. 新規サイトを作成
 
 ```shell
-hugo new site my-blog --format yaml   # YAML形式で設定ファイルを生成
-cd my-blog
+hugo new site blog --format yaml   # YAML形式で設定ファイルを生成
+cd blog
 ```
 
 ---

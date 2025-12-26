@@ -3,7 +3,7 @@ title: "🚀 Hugo × GA4（Google Analytics）連携完全ガイド｜初心者�
 slug: "hugo-ga4-setup-guide"
 description: "Hugo と Google Analytics 4（GA4）を連携し、アクセス解析を開始するための完全ガイド。GA4の初期設定、Measurement IDの取得、Hugoへの導入、PaperModでの注意点、extend_head.htmlを使った確実な実装方法まで丁寧に解説します。"
 date: 2025-12-25T13:00:00+09:00
-lastmod: 2025-12-25T13:00:00+09:00
+lastmod: 2025-12-26T11:00:00+09:00
 draft: false
 categories: ["Web開発", "アクセス解析"]
 tags: ["Hugo", "GA4", "Google Analytics", "PaperMod", "ブログ構築", "初心者向け"]
@@ -55,20 +55,20 @@ Web サイトのユーザー行動を可視化できます。
 2. 左下の **管理（Admin）** を開く
 
 3. 「プロパティを作成」をクリック  
-   - プロパティ名：任意（例：HNEST Blog）  
+   - プロパティ名：任意（例：My Blog）  
    - タイムゾーン：日本  
    - 通貨：JPY
 
 4. 「データストリーム」→ **ウェブ** を選択
 
 5. Web ストリームの URL を設定  
-   - URL：`https://hiro-3817.github.io`  
-   - パス：`/blog/`（任意）
+   - URL：`https://username.github.io`  
+   - パス：`/repository-name/`（任意）
 
 6. Measurement ID（例：`G-SV452C9JE3`）を控える
 
 > **注意**：GA4 の URL 設定は **ドメイン部分にパスを含めない**のが正解です。  
-> 例：`https://hiro-3817.github.io/blog/` は NG
+> 例：`https://username.github.io/repository-name/` は NG
 
 ---
 
@@ -140,7 +140,7 @@ hugo --minify
 ### ❌ measurement_id を hugo.yaml に書いても GA4 が動かない  
 → PaperMod が GA4 を自動出力しないため
 
-### ❌ GA4 の URL に `/blog/` を含めてしまう  
+### ❌ GA4 の URL に `/repository-name/` を含めてしまう  
 → ドメイン欄にはパスを含めない
 
 ### ❌ GitHub Pages のキャッシュで反映が遅れる  

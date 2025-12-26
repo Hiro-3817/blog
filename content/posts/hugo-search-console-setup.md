@@ -48,7 +48,7 @@ sitemap:
 1. **Search Consoleにアクセス**：<https://search.google.com/search-console/>  
 2. 「**プロパティを追加**」をクリック。  
 3. **URLプレフィックス**を選択して、公開URLを入力：  
-   `https://{ユーザー名}.github.io/{リポジトリ名}/`  
+   `https://username.github.io/repository-name/`  
 4. 「**続行**」をクリックして、次の所有権確認へ進みます。
 
 > **補足**  
@@ -78,8 +78,8 @@ Hugoは`static/`配下のファイルを**公開時にルートへ複製**しま
 ```
 
 > **注意**  
-> `static/googleXXXXXXXXXXXX.html` は、公開後に `https://{ユーザー名}.github.io/{リポジトリ名}/googleXXXXXXXXXXXX.html` でアクセスできるようになります。  
-> ただし**プロジェクトサイトの公開パス**が`/{リポジトリ名}/`であるため、Search ConsoleのURLプレフィックスと一致しているか必ず確認してください。
+> `static/googleXXXXXXXXXXXX.html` は、公開後に `https://username.github.io/repository-name/googleXXXXXXXXXXXX.html` でアクセスできるようになります。  
+> ただし**プロジェクトサイトの公開パス**が`/repository-name/`であるため、Search ConsoleのURLプレフィックスと一致しているか必ず確認してください。
 
 ### 2-3. ビルド & デプロイ（gh-pagesへ）
 通常のワークフローでビルドし、`gh-pages`ブランチへデプロイします。
@@ -109,20 +109,20 @@ GitHub Pagesの設定（**Build and deployment → Source: Deploy from a branch 
 > 1) `static/`に置いたか、  
 > 2) `public/`にコピーされているか、  
 > 3) `gh-pages`に反映されているか、  
-> 4) **URLの末尾に`/{リポジトリ名}/`が入っている**かを順に確認しましょう。
+> 4) **URLの末尾に`/repository-name/`が入っている**かを順に確認しましょう。
 
 ---
 
 ## 🗺️ Step 3：サイトマップを登録
 Hugoは`sitemap.xml`を自動生成します。URLは以下のとおりです。
 
-- `https://{ユーザー名}.github.io/{リポジトリ名}/sitemap.xml`
+- `https://username.github.io/repository-name/sitemap.xml`
 
 Search Consoleの「**サイトマップ**」メニューで、上記URLを入力して「**送信**」。  
 ステータスが「成功」となれば登録完了です。
 
 > **補足**  
-> すでに`robots.txt`に `Sitemap: https://{ユーザー名}.github.io/{リポジトリ名}/sitemap.xml` が含まれているため、クローラはサイトマップを自然に参照します。サイトマップの**明示登録**は可視化とエラー検知のためにも有用です。
+> すでに`robots.txt`に `Sitemap: https://username.github.io/repository-name/sitemap.xml` が含まれているため、クローラはサイトマップを自然に参照します。サイトマップの**明示登録**は可視化とエラー検知のためにも有用です。
 
 ---
 
@@ -130,7 +130,7 @@ Search Consoleの「**サイトマップ**」メニューで、上記URLを入�
 新規記事やトップページが検索結果に出ない場合は、**URL検査**でクロールを促します。
 
 1. Search Console左メニュー「**URL検査**」。  
-2. 例：`https://{ユーザー名}.github.io/{リポジトリ名}/posts/記事のスラッグ/` を入力。  
+2. 例：`https://username.github.io/repository-name/posts/記事のスラッグ/` を入力。  
 3. 「**インデックス登録をリクエスト**」をクリック。
 
 > **注意**  
@@ -155,7 +155,7 @@ Search Consoleの「**サイトマップ**」メニューで、上記URLを入�
 ---
 
 ## 🧯 よくあるつまずき（チェックリスト）
-- [ ] **`baseURL`が公開URLと一致**しているか（末尾のスラッシュ・`/{リポジトリ名}/`の有無）。  
+- [ ] **`baseURL`が公開URLと一致**しているか（末尾のスラッシュ・`/repository-name/`の有無）。  
 - [ ] **`gh-pages`ブランチ**に最新の`public/`が反映されているか。  
 - [ ] **確認用HTML**が`static/`直下にあり、中身を変更していないか。  
 - [ ] **`sitemap.xml`が200（成功）で取得可能**か。  
