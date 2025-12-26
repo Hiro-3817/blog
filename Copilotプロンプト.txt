@@ -1,3 +1,14 @@
+Hugo(v0.153.1_extended) + PaperMod(v8.0) + GitHub Pagesでブログを運用しています。
+Hugo設定ファイル(hugo.yaml)とcustom.cssを送付します。
+なお、リポジトリ名は「https://github.com/Hiro-3817/blog」、
+GitHub Pagesの設定はBuild and deploymentのSourceは「Deploy from a branch」、
+Branchは「gh-pages /(root)」になっています。
+
+Google アナリティクス(GA4)の設定はしましたが、SearchConsoleの設定をしたいです。
+SearchConsoleの初期設定および導入方法について詳しく分かりやすく教えて下さい。
+
+===========================================================================================
+
 今やり取りした『ブログの冒頭に表示される「日付・読了時間・作成者」のメタ情報の表示方法（post_meta.html）をカスタマイズする』をテーマに超一流のブログ編集者として記事を作成してください。
 以下の条件を満たした記事を作成してください：
 
