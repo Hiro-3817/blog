@@ -1,69 +1,83 @@
-baseURL: "https://hiro-3817.github.io/blog/"
+# ============================================
+# Hugo v0.153.1_extended + PaperMod v8.0 用設定
+# サイト: GitHub Pages（リポジトリ: https://github.com/Hiro-3817/blog）
+# 公開ブランチ: gh-pages /(root)
+# 公開URL（プロジェクトサイト）: https://hiro-3817.github.io/blog/
+# ============================================
+
+# ---- 基本設定 ----
+baseURL: "https://hiro-3817.github.io/blog/"   # GitHub Pagesの公開URLに完全一致させる
 languageCode: "ja"
 title: "HNEST"
 
 pagination:
-  pagerSize: 10
+  pagerSize: 10                                 # 1ページあたりの記事数（PaperModのpagerSize相当）
 
-# 基本設定
-enableRobotsTXT: true
-canonifyURLs: true
+# ---- ビルド設定 ----
+enableRobotsTXT: true                           # robots.txtを自動生成
+canonifyURLs: true                              # 相対URLを正規化（/blog/ 配下のURL整合性に有効）
 buildDrafts: false
 buildFuture: false
 buildExpired: false
 
-# 出力設定（RSS/Sitemap/Robots）
+# ---- 出力設定 ----
 outputs:
-  home: [HTML, RSS]
+  home: [HTML, RSS]                             # トップページはHTML + RSSを出力
+  section: [HTML]                               # セクション（/posts 等）
+  taxonomy: [HTML]
 
-# パーマリンク（PaperMod推奨のシンプル構成）
+# ---- パーマリンク（推奨：スラッグ固定）----
 permalinks:
   posts: "/posts/:slug/"
 
+# ---- テーマ ----
 theme:
   - PaperMod
 
-# PaperMod params（見た目・SEO・SNS）
+# ---- PaperMod / サイト全体パラメータ ----
 params:
-  env: "production"
-  description: "備忘録"
-  keywords: ["Hugo", "PaperMod", "GitHub Pages", "ブログ"]
-  defaultTheme: "auto"
-  disableSpecial1stPost: true
-  ShowReadingTime: true
-  ShowShareButtons: true
-  ShowCodeCopyButtons: true
-  ShowToc: true
-  TocOpen: false
-  images: ["images/og-image.png"]
-  author: "HNEST"
-  comments: false
+  env: "production"                             # 本番モード（構造化データやOG等の自動最適化に利用）
+  # --- SEO（メタディスクリプション & キーワード） ---
+  description: "Hugo × PaperMod × GitHub Pagesで運営する多ジャンルブログ。ブログ構築・運営、Linuxサーバー設定、Pythonアプリ開発、YouTubeまとめ、おもちゃ・コンビニ新商品、子育て情報、政治・社会トピックまで幅広く発信します。実用的な解説と丁寧なレビューで、毎日の情報収集をサポートします。"
+  keywords: ["Hugoブログ", "PaperModテーマ", "GitHub Pages", "ブログ構築", "ブログ運営", "Linuxサーバー", "Python開発", "YouTubeまとめ", "新商品情報", "コンビニ", "おもちゃ", "子育て", "育児", "政治", "SEO対策", "静的サイト", "プログラミング"]
+  author: "HNEST"                               # 既定の著者名（記事側で上書き可）
+  images: ["images/og-image.png"]               # OG/Twitterカード用既定画像（/static/images/og-image.png を用意）
 
-  # ホーム情報カード
+  # --- 表示/UX ---
+  defaultTheme: "auto"                          # ダーク/ライト自動切替
+  disableSpecial1stPost: true                   # 先頭記事の特別スタイルを無効
+  ShowReadingTime: true                         # 読了時間表示
+  ShowShareButtons: true                        # SNS共有ボタン
+  ShowCodeCopyButtons: true                     # コードコピー
+  ShowToc: true                                 # 目次表示
+  TocOpen: false                                # 目次はデフォルトで閉じる
+  comments: false                               # 必要に応じて true + コメントシステム設定
+
+  # --- ホーム情報カード（初訪問ユーザー向けメッセージ） ---
   homeInfoParams:
-    Title: "こんにちは 👋"
-    Content: "Hugo + PaperModでブログを運用しています。"
+    Title: "ようこそ！🌟"
+    Content: "HNESTブログへようこそ！Hugo × PaperMod × GitHub Pagesで構築したモダンなブログです。ブログ構築・運営、Linuxサーバー設定、Pythonアプリ開発、YouTubeまとめ、おもちゃ・コンビニ新商品、子育て、政治など、暮らしと技術をつなぐ情報を丁寧にお届けします。"
 
-  # ソーシャルリンク（assets/icons/*.svg でカスタムアイコンを使用可能）
+  # --- ソーシャルリンク（assets/icons/*.svg でカスタムアイコンを使用可能）---
   socialIcons:
     - name: github
       url: "https://github.com/Hiro-3817"
     - name: x
-      url: "https://x.com/username"
+      url: "https://x.com/username"            # 置換推奨
     - name: rss
       url: "/index.xml"
 
-  # カスタムCSS（カード背景を調整したい場合など）
+  # --- カスタムCSS（見た目調整） ---
   customCSS:
-    - css/extended/custom.css
+    - css/extended/custom.css                   # /assets/css/extended/custom.css または /static/css/extended/custom.css
 
-# 言語設定
+# ---- 言語設定 ----
 languages:
   ja:
     languageName: "Japanese"
     weight: 1
 
-# メニュー
+# ---- メニュー（/blog/ 配下の公開構成を前提）----
 menu:
   main:
     - name: Home
@@ -78,37 +92,45 @@ menu:
     - name: About
       url: /blog/about/
       weight: 4
+    - name: Contact
+      url: /blog/contact/
+      weight: 5
 
-# タクソノミー
+# ---- タクソノミー（カテゴリ/タグ）----
 taxonomies:
   tag: tags
   category: categories
 
-# Sitemap
+# ---- Sitemap（Hugoが自動生成）----
 sitemap:
   changefreq: daily
   priority: 0.5
-  filename: sitemap.xml
+  filename: sitemap.xml                         # https://hiro-3817.github.io/blog/sitemap.xml
 
-# Minify
+# ---- Minify（配信最適化）----
 minify:
-  disableXML: true
+  disableXML: true                              # XMLは最小化しない（可読性優先）
   minifyOutput: true
 
-# マークアップ（コードハイライト＆生HTML）
+# ---- マークアップ（コードハイライト/生HTML）----
 markup:
   highlight:
-    noClasses: false
+    noClasses: false                            # CSSクラスを使ったハイライト（PaperMod推奨）
   goldmark:
     renderer:
-      unsafe: true
+      unsafe: true                              # 生HTML許可（埋め込みなどを許可）
 
-# プライバシー設定（外部サービスの追跡を抑制）
+# ---- プライバシー（外部サービスの追跡抑制）----
 privacy:
   x:
-    enableDNT: true
+    enableDNT: true                             # Do Not Trackを尊重
   youtube:
-    privacyEnhanced: true
+    privacyEnhanced: true                       # youtube-nocookie.com を使用
 
-# GitHub PagesでのベースURL（プロジェクトサイト例）
-# baseURL: "https://username.github.io/repository-name/"  # プロジェクトサイトの場合はこちらに切り替え
+# ---- （参考）GitHub PagesのbaseURL例（切替時用）----
+# baseURL: "https://username.github.io/repository-name/"  # プロジェクトサイトの場合に利用
+
+# ---- 追加の運用メモ ----
+# - GA4はHugoの旧 googleAnalytics プロパティではなく、gtagのスニペットを layouts/partials/head.html に追加する方法が安定です。
+# - Search Consoleの所有権確認は、googleXXXX.html を /static/ 配下に置けばOK（サイト公開URLが /blog/ である点に注意）。
+# - robots.txt には Hugo が自動で Sitemap 行を含めます（enableRobotsTXT: true）。追加カスタマイズは不要。
