@@ -1,52 +1,73 @@
 name: Deploy Hugo site
 
+# 公開ブランチに書き込むための権限
 permissions:
   contents: write
 
 on:
+  # main に push されたらビルド＆デプロイ
   push:
     branches: ["main"]
+  # 手動実行も可能
   workflow_dispatch:
+
+# 同一ブランチで並行ジョブが走った場合は古いものをキャンセル
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # チェックアウト（サブモジュール含む / 履歴あり）
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: true
-          fetch-depth: 0
+          submodules: true     # PaperMod を submodule 管理している場合に有効
+          fetch-depth: 0       # full history（ビルドメタ情報に必要なケースを想定）
 
-      # Hugo キャッシュ
+      # Hugo キャッシュ（md だけでなく設定・レイアウト・テーマもキーに含める）
       - name: Cache Hugo
         uses: actions/cache@v4
         with:
           path: |
             ~/.cache/hugo
-          key: ${{ runner.os }}-hugo-${{ hashFiles('**/*.md') }}
+          key: ${{ runner.os }}-hugo-${{ hashFiles('**/*.md', '**/*.yaml', '**/*.yml', 'config/**', 'assets/**', 'layouts/**', 'themes/**') }}
           restore-keys: |
             ${{ runner.os }}-hugo-
 
+      # Hugo のセットアップ（extended を指定）
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: '0.153.1'
           extended: true
 
+      # ワークスペースの public をクリーン（念のため）
+      - name: Clean public
+        run: rm -rf public
+
+      # ビルド（最小化オプション）
       - name: Build
         run: hugo --minify
 
-      - name: Deploy
+      # ビルド成果物をアーティファクト保存（デバッグ用）
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hugo-public
+          path: ./public
+
+      # gh-pages へデプロイ（毎回孤立コミット＝履歴リセットでクリーン配置）
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          publish_branch: gh-pages
-          # Jekyll を無効化（.nojekyll を作成）
-          enable_jekyll: false
-          # gh-pages の履歴をクリーン化
-          force_orphan: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}   # デフォルトトークンでOK（contents:write が必要）
+          publish_dir: ./public                       # Hugo の出力ディレクトリ
+          publish_branch: gh-pages                    # 公開ブランチ
+          enable_jekyll: false                        # .nojekyll を作成して Jekyll を無効化
+          force_orphan: true                          # 毎回クリーンにコミット（履歴に依存しない）
           # 独自ドメインを使う場合はコメント解除
           # cname: example.com
