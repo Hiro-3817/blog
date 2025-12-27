@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>サイト構築 on HNEST</title>
+    <link>https://hiro-3817.github.io/blog/categories/%E3%82%B5%E3%82%A4%E3%83%88%E6%A7%8B%E7%AF%89/</link>
+    <description>Recent content in サイト構築 on HNEST</description>
+    <image>
+      <title>HNEST</title>
+      <url>https://hiro-3817.github.io/blog/images/og-image.png</url>
+      <link>https://hiro-3817.github.io/blog/images/og-image.png</link>
+    </image>
+    <generator>Hugo -- 0.153.1</generator>
+    <language>ja</language>
+    <lastBuildDate>Fri, 26 Dec 2025 13:00:00 +0900</lastBuildDate>
+    <atom:link href="https://hiro-3817.github.io/blog/categories/%E3%82%B5%E3%82%A4%E3%83%88%E6%A7%8B%E7%AF%89/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>🛠 Hugo × PaperMod｜ブログ冒頭のメタ情報（投稿日・更新日・読了時間・著者）を美しくカスタマイズする完全ガイド</title>
+      <link>https://hiro-3817.github.io/blog/posts/hugo-papermod-post-meta-custom/</link>
+      <pubDate>Fri, 26 Dec 2025 13:00:00 +0900</pubDate>
+      <guid>https://hiro-3817.github.io/blog/posts/hugo-papermod-post-meta-custom/</guid>
+      <description>Hugo &#43; PaperMod のブログ冒頭に表示される「投稿日・更新日・読了時間・著者情報」を日本語化し、アイコン付きで見やすくカスタマイズする方法を初心者向けに丁寧に解説。post_meta.html の上書き、著者リンク、日英切り替え対応まで完全網羅。</description>
+    </item>
+    <item>
+      <title>🚀 Hugo &#43; PaperMod &#43; GitHub Pagesでブログ公開【初心者向け完全ステップガイド】</title>
+      <link>https://hiro-3817.github.io/blog/posts/hugo-papermod-github-pages-guide/</link>
+      <pubDate>Mon, 22 Dec 2025 10:00:00 +0900</pubDate>
+      <guid>https://hiro-3817.github.io/blog/posts/hugo-papermod-github-pages-guide/</guid>
+      <description>Hugo &#43; PaperMod &#43; GitHub Pagesを使って、ゼロからブログを公開するまでを完全ステップで解説。自動デプロイ（GitHub Actions）、公開URLの設定、OGP、よくあるエラーの回避までこの1本でOK。</description>
+    </item>
+  </channel>
+</rss>
